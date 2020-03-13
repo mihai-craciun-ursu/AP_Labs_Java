@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Main {
@@ -11,6 +12,7 @@ public class Main {
         var residentArray = IntStream.rangeClosed(0,3).mapToObj(i -> new Resident("R"+i)).toArray(Resident[]::new);
         var hospitalArray = IntStream.rangeClosed(0,2).mapToObj(i -> new Hospital("H"+i, random.nextInt(3) + 1)).toArray(Hospital[]::new);
 
+
         List<Resident> listOfResidents = new ArrayList<>();
         for(Resident resident : residentArray){
             listOfResidents.add(resident);
@@ -21,38 +23,64 @@ public class Main {
         Collections.sort(listOfResidents, Comparator.comparing(Resident::getName));
 
         Set<Hospital> setOfHospitals = new TreeSet<>();
-        for(Hospital hospital : setOfHospitals){
-            setOfHospitals.add(hospital);
-        }
+
+        Collections.addAll(setOfHospitals, hospitalArray);
 
 
-        Map<Resident, List<Hospital>> mapOfResidents = new HashMap<>();
+        Map<Resident, List<Hospital>> mapOfResidents = new LinkedHashMap<>();
         Map<Hospital, List<Resident>> mapOfHospitals = new HashMap<>();
+
+
 
 
         //Populating residents Map
         mapOfResidents.put(listOfResidents.get(0),
-                Arrays.asList(new Hospital[]{hospitalArray[0], hospitalArray[1], hospitalArray[2]}));
+                Arrays.asList(hospitalArray[0], hospitalArray[1], hospitalArray[2]));
 
         mapOfResidents.put(listOfResidents.get(1),
-                Arrays.asList(new Hospital[]{hospitalArray[0], hospitalArray[1], hospitalArray[2]}));
+                Arrays.asList(hospitalArray[0], hospitalArray[1], hospitalArray[2]));
 
         mapOfResidents.put(listOfResidents.get(2),
-                Arrays.asList(new Hospital[]{hospitalArray[0], hospitalArray[1]}));
+                Arrays.asList(hospitalArray[0], hospitalArray[1]));
 
         mapOfResidents.put(listOfResidents.get(3),
-                Arrays.asList(new Hospital[]{hospitalArray[0], hospitalArray[2]}));
+                Arrays.asList(hospitalArray[0], hospitalArray[2]));
 
 
         //Populate hospitals Map
         mapOfHospitals.put(hospitalArray[0],
-                Arrays.asList(new Resident[]{residentArray[3], residentArray[0], residentArray[1], residentArray[2]}));
+                Arrays.asList(residentArray[3], residentArray[0], residentArray[1], residentArray[2]));
 
         mapOfHospitals.put(hospitalArray[1],
-                Arrays.asList(new Resident[]{residentArray[0], residentArray[2], residentArray[1]}));
+                Arrays.asList(residentArray[0], residentArray[2], residentArray[1]));
 
         mapOfHospitals.put(hospitalArray[2],
-                Arrays.asList(new Resident[]{residentArray[0], residentArray[1], residentArray[3]}));
+                Arrays.asList(residentArray[0], residentArray[1], residentArray[3]));
+
+
+        List<Hospital> target = Arrays.asList(hospitalArray[0], hospitalArray[1]);
+
+        List<Resident> prefferedResidents = listOfResidents.stream()
+                .filter(resident -> mapOfResidents.get(resident).containsAll(target))
+                .collect(Collectors.toList());
+
+        for(Resident resident : prefferedResidents){
+            System.out.println(resident.getName());
+        }
+
+        //Resident prefResident = residentArray[0];
+        //System.out.println(residentArray[0]);
+        System.out.println(mapOfHospitals.get(hospitalArray[1]).get(0).equals(residentArray[0]));
+
+        List<Hospital> prefferedHospitals = setOfHospitals.stream()
+                .filter(hospital -> mapOfHospitals.get(hospital).get(0).equals(residentArray[0]))
+                .collect(Collectors.toList());
+
+        //System.out.println(prefferedHospitals);
+        for(Hospital hospital : prefferedHospitals){
+            System.out.println(hospital.getName());
+        }
+
 
         System.out.println("Residents preferences");
         for(Map.Entry<Resident, List<Hospital>> entry : mapOfResidents.entrySet()){
