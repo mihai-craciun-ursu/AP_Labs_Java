@@ -11,7 +11,6 @@ public class Matching {
         this.problem = problem;
         solutionList = new ArrayList<>();
 
-        System.out.println("Residents preferences");
         for(Map.Entry<Resident, List<Hospital>> entry : problem.getMapOfResidents().entrySet()){
             boolean hospitalFoundForResident = false;
             int hospitalIndex = 0;
@@ -30,5 +29,16 @@ public class Matching {
 
     public List<Element> getSolution(){
         return solutionList;
+    }
+
+    public boolean isElementOfList(Resident resident, Hospital hospital){
+        for(Element element : solutionList){
+            if(element.getResident().equals(resident)){
+                if(element.getHospital().equals(hospital)){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

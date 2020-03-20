@@ -35,7 +35,12 @@ public class Hospital implements Comparable<Hospital> {
 
     @Override
     public int compareTo(Hospital hospital) {
-        return this.getCapacity() - hospital.getCapacity();
+
+
+
+        if(this.getCapacity() > hospital.getCapacity()){return 1;}
+        else if(this.getCapacity() < hospital.getCapacity()){return -1;}
+        else return this.getName().compareTo(hospital.getName());
     }
 }
 
