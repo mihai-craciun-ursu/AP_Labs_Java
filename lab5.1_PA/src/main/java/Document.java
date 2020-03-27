@@ -14,7 +14,7 @@ public class Document implements Serializable {
     private DocumentType type;
     private String documentLocation;
 
-    public Document(String name, DocumentType type, String documentLocation) {
+    public Document(String name, String documentLocation) {
         this.name = name;
         this.type = type;
         this.documentLocation = documentLocation;
