@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.0.5.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.7.RELEASE'
+}
+
+group 'Lab11.1_PA'
+version '1.0-SNAPSHOT'
+
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    runtime files('lib/ojdbc6.jar')
+
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+
+    compile group: 'org.eclipse.persistence', name: 'org.eclipse.persistence.moxy',
+            version: '2.7.3'
+
+    implementation 'org.springframework.boot:spring-boot-dependencies:2.0.5.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation('io.jsonwebtoken:jjwt:0.2')
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    components {
+        withModule('org.springframework:spring-beans') {
+            allVariants {
+                withDependencyConstraints {
+                    // Need to patch constraints because snakeyaml is an optional dependency
+                    it.findAll { it.name == 'snakeyaml' }.each { it.version { strictly '1.19' } }
+                }
+            }
+        }
+    }
+}
